@@ -3,9 +3,9 @@
 function sumDict(args) -- recibe una lista de tables
     local new = {}
 
-    for v in ipairs(args) do
+    for _, v in ipairs(args) do
         for k, vv in pairs(v) do
-            table.insert(new, k, vv)
+            new[k] = vv
         end
     end
 
@@ -15,8 +15,8 @@ end
 function sumList(args) -- recibe una lista de listas
     local new = {}
 
-    for v  in ipairs(args) do
-        for vv in ipairs(v) do
+    for _, v in ipairs(args) do
+        for _, vv in ipairs(v) do
             table.insert(new, vv)
         end
     end
@@ -43,9 +43,9 @@ local types = {
 
 function newTool(human_name, internal_name) 
     return {
-        humanName = humanName,
-        internalName = internal_name,
-        itemName = internal_name .. "Item",
+        human_name = human_name,
+        internal_name = internal_name,
+        item_name = internal_name .. "Item",
         tipo = types.tool
     }
 end
@@ -65,12 +65,12 @@ local items = {
     cortarArboles = {
         hachas = {
             goodAxe,
-            strongAxe
+            strongAxe,
+            iceAxe
         }
     },
     armas = {
         armasBlancas = {
-            hachas = items.cortarArboles.hachas,
             lanzas = {
                 spear,
                 poisonSpear
@@ -78,6 +78,8 @@ local items = {
         }
     }
 }
+
+items.armas.armasBlancas.hachas = items.cortarArboles.hachas
 
 local fatItems = sumList(
     {
@@ -91,45 +93,50 @@ local traer = window:CreateTab({
     icon = "layers-arrow-up"
 })
 
-function traerF(item_name)
+function traerF(item_name, cantidad)
+    local i = 0
     for _, Obj in pairs(Workspace.Items:GetDescendants()) do
         if Obj.Name == item_name and Obj:IsA("Model") and Obj.PrimaryPart then
             Obj.PrimaryPart.CFrame = root.CFrame
+            i += 1
+            if i >= cantidad and cantidad ~= 0 then
+                break
+            end
         end
     end
 end
 
 local bringInfo = {}
 
-for v in ipairs(fatItems) do
-    table.insert(bringInfo, v.internal_name, {
+for _, v in ipairs(fatItems) do
+    bringInfo[v.internal_name] = {
         amountToBring = 0
-    })
-    insert(bringInfo[v.internal_name], "button", traer:CreateButton(
+    }
+    bringInfo[v.internal_name].button = traer:CreateButton(
         {
             name = "Traer todos los objetos: \"" .. v.human_name .. "\".",
             callback = function()
-                traerF(v.item_name)
+                traerF(v.item_name, bringInfo[v.internal_name].amountToBring)
             end
         }
-    ))
+    )
 
-    insert(bringInfo[v.internal_name], "input", traer:CreateInput(
+    bringInfo[v.internal_name].input = traer:CreateInput(
         {
-            name = "Cantidad de objetos traer (0 es todos).",
+            name = "Cantidad de objetos a traer (0 es todos).",
             numeric = true,
             value = "0",
-            placeholder = "Pon un numero (0 es todos).",
+            placeholder = "Pon un número (0 es todos).",
             flag = "AmountBringOf" .. v.internal_name,
             callback = function(text)
                 bringInfo[v.internal_name].amountToBring = tonumber(text)
-                local cantidad = tonumber(text)
+                local cantidad = text
                 if cantidad == "0" then
                     cantidad = "todos los"
                 end
-                bringInfo[v.internal_name].button:Set("Traer " .. cantidad .. "objetos: \"" .. v.human_name .. "\".")
+                bringInfo[v.internal_name].button:Set("Traer " .. cantidad .. " objetos: \"" .. v.human_name .. "\".")
             end
         }
-    ))
+    )
 
 end
