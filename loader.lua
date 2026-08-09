@@ -112,9 +112,12 @@ for _, v in ipairs(fatItems) do
     bringInfo[v.internal_name] = {
         amountToBring = 0
     }
+
+    bringInfo[v.internal_name].label = traer:CreateLabel("Traer todos los objetos: \"" .. v.human_name .. "\".")
+
     bringInfo[v.internal_name].button = traer:CreateButton(
         {
-            name = "Traer todos los objetos: \"" .. v.human_name .. "\".",
+            name = "Traer los objetos: \"" .. v.human_name .. "\".",
             callback = function()
                 traerF(v.item_name, bringInfo[v.internal_name].amountToBring)
             end
@@ -134,7 +137,7 @@ for _, v in ipairs(fatItems) do
                 if cantidad == "0" then
                     cantidad = "todos los"
                 end
-                bringInfo[v.internal_name].button:Set("Traer " .. cantidad .. " objetos: \"" .. v.human_name .. "\".")
+                bringInfo[v.internal_name].label:UpdateLabel("Traer " .. cantidad .. " objetos: \"" .. v.human_name .. "\".")
             end
         }
     )

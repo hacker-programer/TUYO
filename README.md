@@ -1,0 +1,1 @@
+Para usar en el executor pon loadstring(game:HttpGet('https://raw.githubusercontent.com/hacker-programer/TUYO/main/loader.lua'))()
