@@ -1,3 +1,5 @@
+print("TUYO V1.0.0")
+
 -- Utils
 
 function sumDict(args) -- recibe una lista de tables
@@ -114,7 +116,7 @@ for _, v in ipairs(fatItems) do
     }
 
     bringInfo[v.internal_name].label = traer:CreateLabel({
-        Text = "Traer todos los objetos: \"" .. v.human_name .. "\"."
+        Title = "Traer todos los objetos: \"" .. v.human_name .. "\"."
     })
 
     bringInfo[v.internal_name].button = traer:CreateButton(
