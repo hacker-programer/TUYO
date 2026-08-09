@@ -113,7 +113,9 @@ for _, v in ipairs(fatItems) do
         amountToBring = 0
     }
 
-    bringInfo[v.internal_name].label = traer:CreateLabel("Traer todos los objetos: \"" .. v.human_name .. "\".")
+    bringInfo[v.internal_name].label = traer:CreateLabel({
+        Text = "Traer todos los objetos: \"" .. v.human_name .. "\"."
+    })
 
     bringInfo[v.internal_name].button = traer:CreateButton(
         {
